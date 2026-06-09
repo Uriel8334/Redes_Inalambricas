@@ -1817,8 +1817,6 @@ class PhysicalPhenomenaAnimator extends CanvasAnimator {
         this.particles = [];
         this.fadingWaves = [];
         this.fadingTimer = 0;
-    }
-
     update(width, height) {
         // 1. Partículas para Reflexión/Refracción
         if (Math.random() < 0.15) {
@@ -1826,7 +1824,7 @@ class PhysicalPhenomenaAnimator extends CanvasAnimator {
                 x: width * 0.1,
                 y: height * 0.08,
                 vx: 3,
-                vy: 1.5,
+                vy: 0.8, // Ángulo más horizontal
                 type: 'refl-in',
                 life: 1.0
             });
@@ -1865,41 +1863,60 @@ class PhysicalPhenomenaAnimator extends CanvasAnimator {
             const wallX = width * 0.45;
             const wallWidth = 40;
 
+            // Fila 1: Reflexión/Refracción
             if (p.type === 'refl-in') {
                 if (p.x >= boundaryX) {
                     p.x = boundaryX;
-                    // Crear partícula reflejada
+                    // Crear partícula reflejada (rebota hacia arriba y atrás, desvaneciéndose)
                     this.particles.push({
                         x: boundaryX,
                         y: p.y,
                         vx: -3,
-                        vy: 1.5,
+                        vy: -0.6,
                         type: 'refl-out',
                         life: 1.0
                     });
-                    // Crear partícula refractada (desviada)
+                    // Crear partícula refractada (desviada hacia abajo, desvaneciéndose)
                     this.particles.push({
                         x: boundaryX,
                         y: p.y,
-                        vx: 2.0,
-                        vy: 2.6,
+                        vx: 1.8,
+                        vy: 1.2,
                         type: 'refr-out',
                         life: 1.0
                     });
                     p.remove = true;
                 }
             } else if (p.type === 'absorb-in') {
+                // Fila 2: Absorción
                 if (p.x >= wallX && p.x <= wallX + wallWidth) {
-                    // Ralentizar y absorber
                     p.vx = 1.0;
-                    p.life -= 0.025; // Se apaga más rápido
+                    p.life -= 0.03; // Se apaga dentro de la pared
                 } else if (p.x > wallX + wallWidth) {
                     p.vx = 4.2;
                     p.type = 'absorb-out';
                 }
             }
 
-            if (p.x < 0 || p.x > width || p.y > height) {
+            // Aplicar atenuación gradual y límites de zona para evitar invasión visual
+            if (p.type === 'refl-out' || p.type === 'refr-out') {
+                p.life -= 0.035; // Desvanecer rápidamente
+                // Limitar al Y de la Fila 1 (0 a 0.38 del alto)
+                if (p.y > height * 0.36 || p.y < 0) {
+                    p.remove = true;
+                }
+            }
+            
+            if (p.type === 'absorb-out') {
+                p.life -= 0.05; // Desvanecer rápidamente después de salir de la pared
+                // Limitar al Y de la Fila 2 (0.38 a 0.68 del alto)
+                if (p.y < height * 0.38 || p.y > height * 0.68) {
+                    p.remove = true;
+                }
+            }
+
+            // Eliminar si sale por los bordes laterales del lienzo
+            if (p.x < 0 || p.x > width) {
                 p.remove = true;
             }
         });
