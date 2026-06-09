@@ -302,8 +302,8 @@ class PresentationController {
      */
     setupAdaptiveScaling() {
         const adjustScale = () => {
-            const activeSlide = document.querySelector('.slide-container.active');
-            if (!activeSlide) return;
+            const container = document.getElementById('presentation-container');
+            if (!container) return;
 
             const baseWidth = 1280;
             const baseHeight = 720;
@@ -314,12 +314,9 @@ class PresentationController {
             // Calcular escala ideal manteniendo relación de aspecto
             const scale = Math.min(windowWidth / baseWidth, windowHeight / baseHeight);
             
-            // Aplicar escala a todas las diapositivas
-            this.slides.forEach(slide => {
-                // Mantener el posicionamiento absoluto en el centro
-                slide.style.transform = `scale(${scale})`;
-                slide.style.transformOrigin = 'center center';
-            });
+            // Aplicar escala al contenedor principal centrado
+            container.style.transform = `scale(${scale})`;
+            container.style.transformOrigin = 'center center';
         };
 
         window.addEventListener('resize', adjustScale);

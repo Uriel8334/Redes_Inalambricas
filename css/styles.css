@@ -42,6 +42,16 @@ body {
 }
 
 /* 2. LIENZO DIAPOSITIVA (16:9 Adaptativo) */
+#presentation-container {
+    width: 1280px;
+    height: 720px;
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .slide-container {
     background-color: var(--bg-card);
     border-radius: 16px;
@@ -49,12 +59,14 @@ body {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
     display: flex;
     flex-direction: column;
-    height: 720px;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
     justify-content: flex-start;
     overflow: hidden;
     padding: 50px 70px;
     position: absolute; /* Para superposición */
-    width: 1280px;
     
     /* Estado inicial para transición de entrada */
     opacity: 0;
@@ -129,7 +141,7 @@ body {
 
 /* 4. CONTROLES DE LA PRESENTACIÓN (Glassmorphism) */
 .presentation-controls {
-    position: fixed;
+    position: absolute;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
