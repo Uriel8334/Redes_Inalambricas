@@ -1817,6 +1817,8 @@ class PhysicalPhenomenaAnimator extends CanvasAnimator {
         this.particles = [];
         this.fadingWaves = [];
         this.fadingTimer = 0;
+    }
+
     update(width, height) {
         // 1. Partículas para Reflexión/Refracción
         if (Math.random() < 0.15) {
