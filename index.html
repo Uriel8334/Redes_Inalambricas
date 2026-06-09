@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción a las Redes Inalámbricas y su Evolución</title>
+    
+    <!-- Fuentes de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Hoja de estilos premium externa -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Contenedor Principal para el Escalado Adaptativo -->
+    <div id="presentation-container">
+        
+        <!-- Slide 1: Portada -->
+        <section class="slide-container" id="slide1">
+            <div class="content-area">
+                <div class="title-layout">
+                    <span class="tag-pill">Presentación Académica</span>
+                    <h1>Introducción a las Redes Inalámbricas y su Evolución</h1>
+                    <p class="subtitle">Principios, Historia y Tecnologías de Conectividad Contemporánea</p>
+                    <div class="author-info">
+                        <p><strong>Grupo 1:</strong> Andrade Uriel, Baez Gabriel, Valencia Yuliana</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: ¿Qué son las Redes Inalámbricas? -->
+        <section class="slide-container" id="slide2">
+            <h2 class="slide-title">¿Qué son las Redes Inalámbricas?</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <p>Una red inalámbrica es una infraestructura de telecomunicaciones que permite la <strong>transferencia de datos entre dispositivos sin utilizar medios físicos guiados</strong> (como cables de cobre o fibra óptica).</p>
+                        <p>Utiliza el espectro electromagnético para propagar señales a través del espacio libre, conectando estaciones transmisoras y receptoras a distancia.</p>
+                        <p>Su principal ventaja radica en la <strong>movilidad y flexibilidad</strong>, eliminando barreras geográficas y reduciendo costos de despliegue físico.</p>
+                    </div>
+                    <div>
+                        <div class="animation-wrapper" style="box-shadow: 0 15px 35px rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.25);">
+                            <div class="network-anim-container">
+                                <!-- Ondas de Radiofrecuencia (expansión) -->
+                                <div class="rf-wave" style="animation-delay: 0s;"></div>
+                                <div class="rf-wave" style="animation-delay: 1.1s;"></div>
+                                <div class="rf-wave" style="animation-delay: 2.2s;"></div>
+                                
+                                <!-- Router Central -->
+                                <div class="router-node">
+                                    <i class="fa-solid fa-wifi"></i>
+                                </div>
+                                
+                                <!-- Dispositivos Cliente flotantes -->
+                                <div class="client-node client-1" title="Laptop"><i class="fa-solid fa-laptop"></i></div>
+                                <div class="client-node client-2" title="Smartphone"><i class="fa-solid fa-mobile-screen"></i></div>
+                                <div class="client-node client-3" title="Tablet"><i class="fa-solid fa-tablet-screen-button"></i></div>
+                                
+                                <!-- Paquetes de datos simulando transferencia -->
+                                <div class="data-particle packet-1"></div>
+                                <div class="data-particle packet-2"></div>
+                                <div class="data-particle packet-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Medios de Propagación -->
+        <section class="slide-container" id="slide3">
+            <h2 class="slide-title">Medios de Propagación</h2>
+            <div class="content-area">
+                <div class="tiled-content">
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-broadcast-tower"></i></div>
+                        <h3>Radiofrecuencia (RF)</h3>
+                        <p>El estándar principal. Utiliza bandas desde kHz hasta GHz. Posee gran capacidad para penetrar obstáculos físicos (paredes, vegetación), permitiendo coberturas amplias.</p>
+                    </div>
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-satellite-dish"></i></div>
+                        <h3>Microondas</h3>
+                        <p>Operan a frecuencias más elevadas (banda de GHz). Permiten mayores velocidades de transmisión, pero requieren línea de visión directa (LOS). Usadas en enlaces satelitales y torres troncales.</p>
+                    </div>
+                    <div class="tile">
+                        <div class="icon"><i class="fa-solid fa-lightbulb"></i></div>
+                        <h3>Infrarrojos</h3>
+                        <p>Transmisión óptica a muy corta distancia. Altamente segura porque no puede atravesar sólidos (paredes). Su uso comercial se limita a periféricos y sensores de corto alcance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Papel de la Radiofrecuencia y Modulación -->
+        <section class="slide-container" id="slide4">
+            <h2 class="slide-title">El Fundamento: Modulación de RF</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <p>La información digital (0s y 1s) no puede viajar sola por el aire en banda base. Necesita acoplarse a una señal analógica de alta frecuencia.</p>
+                        <p>La <strong>modulación</strong> consiste en modificar una característica física de la onda portadora para "codificar" los datos. Las técnicas fundamentales incluyen:</p>
+                        <ul class="bullet-list" style="margin-top: 15px;">
+                            <li><i class="fa-solid fa-wave-square"></i> <strong>Amplitud (AM / ASK):</strong> Varía la potencia de la onda portadora para denotar bits.</li>
+                            <li><i class="fa-solid fa-water"></i> <strong>Frecuencia (FM / FSK):</strong> Varía la tasa de oscilación de la señal portadora.</li>
+                            <li><i class="fa-solid fa-chart-line"></i> <strong>Fase (PM / PSK):</strong> Desplaza el ángulo de fase de la onda en transiciones de bit.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="animation-wrapper">
+                            <!-- Visualizador interactivo de modulación -->
+                            <canvas id="rf-modulation-canvas" class="interactive-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Fenómenos Físicos -->
+        <section class="slide-container" id="slide5">
+            <h2 class="slide-title">Fenómenos Físicos de Propagación</h2>
+            <div class="content-area">
+                <p style="text-align: center; margin-bottom: 25px; font-size: 19px; max-width: 900px;">A diferencia de un cable protegido, las ondas viajan por el espacio libre y sufren alteraciones que atenúan su potencia y distorsionan la señal:</p>
+                <div class="tiled-content">
+                    <div class="tile">
+                        <span class="tag-pill">Efecto Rebote</span>
+                        <h3>Reflexión y Refracción</h3>
+                        <p>Las ondas "rebotan" al chocar con superficies planas mayores a su longitud de onda (reflexión) o se desvían al cambiar de medio de propagación (refracción).</p>
+                    </div>
+                    <div class="tile">
+                        <span class="tag-pill">Pérdida de energía</span>
+                        <h3>Absorción</h3>
+                        <p>Materiales comunes como el hormigón, el agua, el metal y la vegetación "absorben" la energía electromagnética, debilitando significativamente el rango de cobertura.</p>
+                    </div>
+                    <div class="tile">
+                        <span class="tag-pill">Interferencia Multitrayecto</span>
+                        <h3>Multipath Fading</h3>
+                        <p>Una misma señal llega al receptor por múltiples caminos y retardos debido a rebotes. Los receptores modernos usan algoritmos y ecualizadores para resolver este eco.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Antecedentes (Maxwell y Hertz) -->
+        <section class="slide-container" id="slide6">
+            <h2 class="slide-title">Antecedentes Científicos (Siglo XIX)</h2>
+            <div class="content-area">
+                <div class="two-column tiled">
+                    <div>
+                        <span class="tag-pill">La Teoría</span>
+                        <h3>James Clerk Maxwell (1864)</h3>
+                        <p>Formuló las famosas ecuaciones que unificaron la electricidad y el magnetismo en el electromagnetismo. Demostró matemáticamente que los campos eléctricos y magnéticos viajan por el espacio como ondas transversales a la velocidad de la luz.</p>
+                    </div>
+                    <div>
+                        <span class="tag-pill">La Evidencia</span>
+                        <h3>Heinrich Hertz (1888)</h3>
+                        <p>Validó experimentalmente las teorías de Maxwell en su laboratorio. Construyó el primer oscilador (emisor de chispa) y un resonador, detectando ondas electromagnéticas en el aire y demostrando que compartían propiedades físicas con la luz.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Controversia Tesla Marconi -->
+        <section class="slide-container" id="slide7">
+            <h2 class="slide-title">La Controversia: Tesla vs. Marconi</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <p>La invención de la radio generó un intenso debate histórico y legal. <strong>Nikola Tesla</strong> patentó la tecnología central del circuito sintonizado inalámbrico en 1897.</p>
+                        <p><strong>Guglielmo Marconi</strong> realizó la primera transmisión comercial transatlántica de código morse en 1901, ganando fama, contratos y el Premio Nobel de Física.</p>
+                        <p>Sin embargo, la patente comercial de <strong>Marconi utilizó 17 patentes de Tesla</strong>. En 1943, la Corte Suprema de EE.UU. anuló la patente principal de Marconi, reconociendo oficialmente a Tesla como el inventor legítimo de la radio.</p>
+                    </div>
+                    <div>
+                        <div class="animation-wrapper">
+                            <!-- Visualizador interactivo de Bobina de Tesla y Antena de Marconi -->
+                            <canvas id="tesla-marconi-canvas" class="interactive-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Primeras Aplicaciones -->
+        <section class="slide-container" id="slide8">
+            <h2 class="slide-title">Primeras Aplicaciones y Limitaciones</h2>
+            <div class="content-area">
+                <div class="bullet-list">
+                    <ul>
+                        <li><i class="fa-solid fa-anchor"></i> <strong>Sector Marítimo y Seguridad:</strong> Permitió la comunicación de barco a tierra. Fue crucial para salvar a más de 700 pasajeros del <em>Titanic (1912)</em> mediante señales de socorro por telegrafía inalámbrica.</li>
+                        <li><i class="fa-solid fa-shield-halved"></i> <strong>Uso Militar Estratégico:</strong> Control y monopolización estatal de las frecuencias en la Primera y Segunda Guerra Mundial para espionaje y control de tropas navales.</li>
+                        <li><i class="fa-solid fa-ban"></i> <strong>Limitación Analógica Temprana:</strong> Los primeros "transmisores de chispa" generaban ondas amortiguadas ruidosas. Eran capaces de transmitir pulsos (código morse) pero incapaces de transmitir voz continua.</li>
+                        <li><i class="fa-solid fa-triangle-exclamation"></i> <strong>Saturación de Banda:</strong> Equipos sin sintonización fina que ocupaban anchos de banda masivos, causando severas interferencias mutuas y colapsos locales del espectro.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: 1G y 2G -->
+        <section class="slide-container" id="slide9">
+            <h2 class="slide-title">La Era Celular Inicial (1G a 2G)</h2>
+            <div class="content-area">
+                <p style="text-align: center; margin-bottom: 25px; font-size: 19px;">La evolución de lo analógico a lo digital, preparando el camino para las redes móviles de banda ancha:</p>
+                <div class="two-column tiled">
+                    <div>
+                        <span class="tag-pill">Década de 1980</span>
+                        <h3>Primera Generación (1G)</h3>
+                        <p>Uso de <strong>sistemas analógicos</strong> (como AMPS). Diseñados exclusivamente para la transmisión de voz. Introdujo el concepto de celdas geográficas (células) para reutilizar frecuencias, pero carecía de cifrado y era susceptible a la clonación y ruidos.</p>
+                    </div>
+                    <div>
+                        <span class="tag-pill">Década de 1990</span>
+                        <h3>Segunda Generación (2G)</h3>
+                        <p>Salto disruptivo a la <strong>transmisión digital</strong> (ej. estándares GSM y CDMA). Permitió cifrar llamadas para seguridad, mejoró la eficiencia espectral (mayor capacidad) y dio origen al primer servicio de mensajería de texto: <strong>El SMS</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Pioneros Wi-Fi -->
+        <section class="slide-container" id="slide10">
+            <h2 class="slide-title">Los Pioneros del Wi-Fi</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <p>Paralelamente al desarrollo celular, se gestaron las bases para las redes locales inalámbricas (WLAN). Dos figuras marcaron la pauta:</p>
+                        <p><strong>1. Hedy Lamarr (La Base Teórica):</strong> Actriz e inventora austriaca. En 1942 patentó el <em>"sistema de comunicación secreta"</em> basado en salto de frecuencia. Es la tecnología fundacional de seguridad en Wi-Fi y Bluetooth moderno.</p>
+                        <p><strong>2. Vic Hayes (El Padre del Wi-Fi):</strong> Ingeniero que presidió el comité de estándares IEEE 802.11 desde 1990 hasta el 2000, unificando a los fabricantes mundiales bajo una norma global de interoperabilidad comercial.</p>
+                    </div>
+                    <div>
+                        <div class="animation-wrapper">
+                            <!-- Visualizador interactivo de Salto de Frecuencia de Hedy Lamarr -->
+                            <canvas id="frequency-hopping-canvas" class="interactive-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Tabla de Evolución Wi-Fi -->
+        <section class="slide-container" id="slide11">
+            <h2 class="slide-title">Evolución Paralela de las Redes Inalámbricas</h2>
+            <div class="content-area" style="justify-content: center;">
+                <div class="dual-timeline">
+                    <!-- Pista 1: Evolución Celular -->
+                    <div class="timeline-track">
+                        <div class="track-header">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                            <h3>Evolución Celular</h3>
+                        </div>
+                        <div class="track-nodes">
+                            <div class="timeline-node">
+                                <p class="node-title">1G</p>
+                                <p class="node-desc">Voz analógica</p>
+                                <span class="node-year">1983</span>
+                            </div>
+                            <div class="timeline-node">
+                                <p class="node-title">2G</p>
+                                <p class="node-desc">SMS y Cifrado (GSM)</p>
+                                <span class="node-year">1991</span>
+                            </div>
+                            <div class="timeline-node">
+                                <p class="node-title">3G</p>
+                                <p class="node-desc">Datos y Web (UMTS)</p>
+                                <span class="node-year">2001</span>
+                            </div>
+                            <div class="timeline-node">
+                                <p class="node-title">4G</p>
+                                <p class="node-desc">Banda Ancha IP (LTE)</p>
+                                <span class="node-year">2009</span>
+                            </div>
+                            <div class="timeline-node">
+                                <p class="node-title">5G</p>
+                                <p class="node-desc">Baja Latencia / IoT</p>
+                                <span class="node-year">2019</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pista 2: Desarrollo Wi-Fi -->
+                    <div class="timeline-track">
+                        <div class="track-header">
+                            <i class="fa-solid fa-wifi"></i>
+                            <h3>Desarrollo Wi-Fi</h3>
+                        </div>
+                        <div class="track-nodes">
+                            <div class="timeline-node">
+                                <p class="node-title">ALOHAnet</p>
+                                <p class="node-desc">Conexión por Radio</p>
+                                <span class="node-year">1971</span>
+                            </div>
+                            <div class="timeline-node">
+                                <p class="node-title">802.11b</p>
+                                <p class="node-desc">11 Mbps (2.4 GHz)</p>
+                                <span class="node-year">1999</span>
+                            </div>
+                            <div class="timeline-node">
+                                <p class="node-title">Wi-Fi 4</p>
+                                <p class="node-desc">MIMO (2.4/5 GHz)</p>
+                                <span class="node-year">2009</span>
+                            </div>
+                            <div class="timeline-node">
+                                <p class="node-title">Wi-Fi 5</p>
+                                <p class="node-desc">MU-MIMO (5 GHz)</p>
+                                <span class="node-year">2013</span>
+                            </div>
+                            <div class="timeline-node">
+                                <p class="node-title">Wi-Fi 7</p>
+                                <p class="node-desc">Multi-Link / 40 Gbps</p>
+                                <span class="node-year">2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensaje de Cierre / Transición -->
+                <p class="timeline-footer">
+                    <strong>Convergencia Tecnológica:</strong> Ambas arquitecturas convergen hacia sistemas All-IP, multiplexación ortogonal (OFDM) y arquitecturas multi-antena (MIMO) para maximizar la velocidad.
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 12: Bandas ISM -->
+        <section class="slide-container" id="slide12">
+            <h2 class="slide-title">El Espectro Libre (Bandas ISM)</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <ul class="bullet-list">
+                            <li><i class="fa-solid fa-dumpster"></i> <strong>El "Espectro Basura":</strong> En los 80, la banda de 2.4 GHz se consideraba inútil comercialmente porque los <strong>hornos de microondas</strong> resonaban en esa frecuencia exacta, generando un ruido destructivo.</li>
+                            <li><i class="fa-solid fa-unlock"></i> <strong>Liberación de Frecuencias:</strong> Las agencias reguladoras la declararon libre (sin licencia) para uso Industrial, Científico y Médico (ISM), permitiendo la experimentación.</li>
+                            <li><i class="fa-solid fa-wand-magic-sparkles"></i> <strong>El Logro de Ingeniería:</strong> Los ingenieros desarrollaron protocolos de tolerancia al ruido (como CSS y DSSS). Gracias a esto, hoy disponemos de redes inalámbricas domésticas sin pedir concesiones estatales.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="animation-wrapper">
+                            <!-- Visualizador interactivo de Interferencia ISM (Microondas vs Wi-Fi) -->
+                            <canvas id="ism-interference-canvas" class="interactive-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 13: ALOHAnet e Inversa del Cuadrado -->
+        <section class="slide-container" id="slide13">
+            <h2 class="slide-title">Principios: Física y Geografía</h2>
+            <div class="content-area">
+                <div class="two-column tiled">
+                    <div>
+                        <span class="tag-pill">Orígenes Geográficos</span>
+                        <h3>ALOHAnet (Hawái, 1971)</h3>
+                        <p>La primera red inalámbrica de conmutación de paquetes del mundo nació por una restricción física. En la Universidad de Hawái, conectar islas mediante cable era costoso y riesgoso. Desarrollaron conexiones por radio (protocolo ALOHA), sentando las bases de la detección de colisiones usada en Ethernet y Wi-Fi (CSMA/CA).</p>
+                    </div>
+                    <div>
+                        <span class="tag-pill">Física Electromagnética</span>
+                        <h3>Ley de la Inversa del Cuadrado</h3>
+                        <p>Determina la propagación en espacio libre. La intensidad de la señal decae en forma inversa al cuadrado de la distancia ($1/d^2$). Si duplicas la distancia entre el receptor y el punto de acceso, la señal recibida no cae a la mitad, **cae a la cuarta parte**, requiriendo una densificación de repetidores.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 14: IoT -->
+        <section class="slide-container" id="slide14">
+            <h2 class="slide-title">La Era Moderna (IoT)</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <h3>Conectividad Ubicua M2M</h3>
+                        <p>La maduración de las redes inalámbricas dio paso al <strong>Internet de las Cosas (IoT)</strong> y las redes de baja potencia y largo alcance (LPWAN) como LoRaWAN y NB-IoT.</p>
+                        <p>Ya no conectamos solo terminales humanos (PCs, móviles), sino miles de millones de sensores, electrodomésticos, vehículos e infraestructura urbana en redes de malla autoregenerables, impulsando las Ciudades Inteligentes.</p>
+                    </div>
+                    <div>
+                        <div class="animation-wrapper">
+                            <!-- Visualizador interactivo de Red de Malla IoT -->
+                            <canvas id="iot-mesh-canvas" class="interactive-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 15: Q&A -->
+        <section class="slide-container" id="slide15">
+            <div class="content-area">
+                <div class="qa-layout">
+                    <h2>¿Preguntas o Dudas?</h2>
+                    <p style="margin-bottom: 30px;">Muchas gracias por su atención.</p>
+                    <p style="font-size: 18px; color: var(--text-muted);">A continuación, el resto del equipo profundizará en los Estándares Wi-Fi y Tecnologías de Redes Celulares Contemporáneas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controles Flotantes de la Presentación -->
+        <div class="presentation-controls">
+            <button id="prevBtn" title="Anterior (Flecha Izquierda / Click)"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="slide-counter">1 / 15</span>
+            <button id="nextBtn" title="Siguiente (Flecha Derecha / Espacio / Click)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        
+    </div>
+
+    <!-- Script de control externo -->
+    <script src="js/presentation.js"></script>
+    <script>
+        // Inicializar controlador cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            const presentation = new PresentationController({
+                autoplayInterval: 8000 // 8 segundos por diapositiva para permitir leer
+            });
+            presentation.init();
+        });
+    </script>
+</body>
+</html>
