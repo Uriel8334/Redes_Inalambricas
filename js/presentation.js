@@ -48,6 +48,9 @@ class PresentationController {
 
         // Configurar Event Listeners
         this.setupEventListeners();
+
+        // Configurar ocultamiento automático de controles
+        this.setupAutohideControls();
         
         // Inicializar Escalamiento Adaptativo
         this.setupAdaptiveScaling();
@@ -277,6 +280,48 @@ class PresentationController {
             this.touchEndX = e.changedTouches[0].screenX;
             this.handleSwipeGesture();
         }, { passive: true });
+    }
+
+    /**
+     * Configura el ocultamiento automático de los controles inferiores
+     */
+    setupAutohideControls() {
+        const controls = document.querySelector('.presentation-controls');
+        if (!controls) return;
+
+        let hideTimeout;
+        const delay = 3000; // Ocultar después de 3 segundos de inactividad
+
+        const showControls = () => {
+            controls.classList.remove('hide');
+            resetTimer();
+        };
+
+        const hideControls = () => {
+            // No ocultar si el mouse está sobre los controles, o si el menú lateral está abierto
+            const isMenuOpen = this.menuDrawer && this.menuDrawer.classList.contains('open');
+            const isHovered = controls.matches(':hover');
+            if (!isHovered && !isMenuOpen) {
+                controls.classList.add('hide');
+            } else {
+                // Reintentar más tarde
+                resetTimer();
+            }
+        };
+
+        const resetTimer = () => {
+            clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(hideControls, delay);
+        };
+
+        // Mostrar controles al mover el mouse, presionar teclas, tocar la pantalla o hacer click
+        document.addEventListener('mousemove', showControls);
+        document.addEventListener('keydown', showControls);
+        document.addEventListener('touchstart', showControls, { passive: true });
+        document.addEventListener('click', showControls);
+
+        // Iniciar el temporizador
+        resetTimer();
     }
 
     /**
