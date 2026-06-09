@@ -546,8 +546,14 @@ class PresentationController {
      * Inicializa los objetos animadores
      */
     initSlideAnimators() {
+        // Slide 3: Medios de Propagación
+        this.animators[3] = new PropagationMediaAnimator('propagation-media-canvas');
+
         // Slide 4: Modulación de Radiofrecuencia (AM, FM, PM)
         this.animators[4] = new RfModulationAnimator('rf-modulation-canvas');
+
+        // Slide 5: Fenómenos físicos de propagación
+        this.animators[5] = new PhysicalPhenomenaAnimator('physical-phenomena-canvas');
 
         // Slide 7: Tesla vs Marconi
         this.animators[7] = new TeslaMarconiAnimator('tesla-marconi-canvas');
@@ -741,10 +747,39 @@ class RfModulationAnimator extends CanvasAnimator {
             lastDigitalVal = digitalVal;
         }
         ctx.stroke();
+
+        // Dibujar los bits (1 o 0) encima del gráfico de datos
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px Poppins';
+        ctx.textAlign = 'center';
+        
+        const segmentWidth = 80;
+        const segmentOffset = -(timeScale % segmentWidth);
+        const bits = [1, 0, 1, 1, 0, 0];
+        
+        for (let startX = segmentOffset - segmentWidth; startX < width + segmentWidth; startX += segmentWidth) {
+            const absoluteX = startX + timeScale;
+            const bitIndex = Math.floor(absoluteX / segmentWidth) % bits.length;
+            const bitVal = bits[bitIndex >= 0 ? bitIndex : (bits.length + bitIndex) % bits.length];
+            
+            const centerX = startX + segmentWidth / 2;
+            const centerY = y1 + (bitVal === 1 ? -rowHeight * 0.35 - 12 : rowHeight * 0.35 + 20);
+            
+            if (centerX > 0 && centerX < width) {
+                ctx.fillStyle = bitVal === 1 ? 'rgba(129, 140, 248, 0.15)' : 'rgba(71, 85, 105, 0.2)';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - 5, 11, 0, Math.PI*2);
+                ctx.fill();
+                
+                ctx.fillStyle = bitVal === 1 ? '#818cf8' : '#94a3b8';
+                ctx.fillText(bitVal, centerX, centerY);
+            }
+        }
         
         // Texto de datos digitales
         ctx.fillStyle = '#f8fafc';
         ctx.font = '13px Inter';
+        ctx.textAlign = 'left';
         ctx.fillText('Datos Digitales (Mensaje a enviar)', 15, y1 - rowHeight * 0.4);
         
         // 2. DIBUJAR PORTADORA ANALÓGICA
@@ -1498,3 +1533,590 @@ class IotMeshAnimator extends CanvasAnimator {
         ctx.fillText('Malla M2M', centerX, centerY + 5);
     }
 }
+
+/**
+ * Animador de Medios de Propagación (RF, Microondas, Infrarrojos)
+ */
+class PropagationMediaAnimator extends CanvasAnimator {
+    setup() {
+        this.waves = [];
+        this.microwaveBeamProgress = 0;
+        this.irBlocked = false;
+        this.rfWaveTimer = 0;
+    }
+
+    update(width, height) {
+        // RF waves (row 1: height * 0.22)
+        this.rfWaveTimer++;
+        if (this.rfWaveTimer > 25) {
+            this.rfWaveTimer = 0;
+            this.waves.push({
+                x: width * 0.15,
+                y: height * 0.22,
+                radius: 10,
+                opacity: 1.0,
+                type: 'rf'
+            });
+        }
+
+        // Update RF waves
+        this.waves.forEach(w => {
+            w.radius += 2.2;
+            if (w.radius > width * 0.35) {
+                // Disminuir la opacidad más rápido al cruzar la pared
+                w.opacity -= 0.015;
+            } else {
+                w.opacity -= 0.005;
+            }
+        });
+        this.waves = this.waves.filter(w => w.opacity > 0);
+
+        // Microwave beam progress (row 2: height * 0.52)
+        this.microwaveBeamProgress += 0.02;
+        if (this.microwaveBeamProgress > 1) {
+            this.microwaveBeamProgress = 0;
+        }
+
+        // IR blocking toggle (row 3: height * 0.82)
+        if (Math.floor(this.time * 0.25) % 2 === 0) {
+            this.irBlocked = true;
+        } else {
+            this.irBlocked = false;
+        }
+    }
+
+    draw(width, height) {
+        const ctx = this.ctx;
+        
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, width, height);
+
+        // Subdividir en 3 zonas con líneas punteadas horizontales sutiles
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, height * 0.38);
+        ctx.lineTo(width, height * 0.38);
+        ctx.moveTo(0, height * 0.68);
+        ctx.lineTo(width, height * 0.68);
+        ctx.stroke();
+
+        // 1. ZONA RADIOFRECUENCIA (RF) - Omnidireccional y penetración
+        const rfY = height * 0.22;
+        const rfTX = width * 0.15;
+        const rfRX = width * 0.85;
+        const wallX = width * 0.5;
+
+        // Dibujar torre emisora RF
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(rfTX - 10, rfY + 25);
+        ctx.lineTo(rfTX, rfY - 15);
+        ctx.lineTo(rfTX + 10, rfY + 25);
+        ctx.moveTo(rfTX, rfY - 15);
+        ctx.lineTo(rfTX, rfY + 25);
+        ctx.stroke();
+        
+        ctx.fillStyle = '#ef4444'; // Punto emisor rojo
+        ctx.beginPath();
+        ctx.arc(rfTX, rfY - 15, 3, 0, Math.PI*2);
+        ctx.fill();
+
+        // Dibujar pared (sólido)
+        ctx.fillStyle = 'rgba(100, 116, 139, 0.3)'; // Slate transparente
+        ctx.strokeStyle = 'rgba(100, 116, 139, 0.7)';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(wallX - 12, rfY - 30, 24, 60);
+        ctx.strokeRect(wallX - 12, rfY - 30, 24, 60);
+        
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = 'bold 9px Inter';
+        ctx.textAlign = 'center';
+        ctx.fillText('OBSTÁCULO', wallX, rfY + 42);
+
+        // Dibujar receptor (Dispositivo cliente)
+        ctx.strokeStyle = '#475569';
+        ctx.fillStyle = '#1e293b';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(rfRX - 15, rfY - 10, 30, 20);
+        ctx.strokeRect(rfRX - 15, rfY - 10, 30, 20);
+        ctx.fillRect(rfRX - 20, rfY + 10, 40, 4); // Soporte laptop
+        
+        // Dibujar ondas RF atravesando la pared
+        this.waves.forEach(w => {
+            ctx.strokeStyle = `rgba(56, 189, 248, ${w.opacity})`; // Cyan
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            // Arco de onda (propagando hacia la derecha)
+            ctx.arc(w.x, w.y, w.radius, -Math.PI/4, Math.PI/4);
+            ctx.stroke();
+        });
+
+        // Textos descriptivos RF
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 12px Poppins';
+        ctx.textAlign = 'left';
+        ctx.fillText('RADIOFRECUENCIA (RF): Ondas omnidireccionales que traspasan obstáculos', 20, 25);
+
+        // 2. ZONA MICROONDAS - Haz enfocado y línea de vista
+        const microY = height * 0.52;
+        const microTX = width * 0.15;
+        const microRX = width * 0.85;
+
+        // Antena Parabólica TX (Emisora)
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        // Soporte
+        ctx.moveTo(microTX - 10, microY + 25);
+        ctx.lineTo(microTX, microY);
+        ctx.lineTo(microTX + 10, microY + 25);
+        // Plato parabólico
+        ctx.arc(microTX, microY - 5, 12, Math.PI/2, Math.PI*1.5, true);
+        ctx.stroke();
+        // Iluminador
+        ctx.strokeStyle = '#ea580c';
+        ctx.beginPath();
+        ctx.moveTo(microTX, microY - 5);
+        ctx.lineTo(microTX + 8, microY - 5);
+        ctx.stroke();
+
+        // Antena Parabólica RX (Receptora)
+        ctx.strokeStyle = '#64748b';
+        ctx.beginPath();
+        // Soporte
+        ctx.moveTo(microRX - 10, microY + 25);
+        ctx.lineTo(microRX, microY);
+        ctx.lineTo(microRX + 10, microY + 25);
+        // Plato parabólico
+        ctx.arc(microRX, microY - 5, 12, Math.PI/2, Math.PI*1.5, false);
+        ctx.stroke();
+        // Iluminador
+        ctx.strokeStyle = '#ea580c';
+        ctx.beginPath();
+        ctx.moveTo(microRX, microY - 5);
+        ctx.lineTo(microRX - 8, microY - 5);
+        ctx.stroke();
+
+        // Dibujar haz colimado (onda muy enfocada viajando)
+        ctx.strokeStyle = 'rgba(234, 88, 12, 0.15)'; // Naranja sutil
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.moveTo(microTX + 10, microY - 5);
+        ctx.lineTo(microRX - 10, microY - 5);
+        ctx.stroke();
+
+        // Onda que viaja por la línea
+        ctx.strokeStyle = '#f97316';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        for (let lx = microTX + 15; lx < microRX - 15; lx++) {
+            // Dibujar ondas senoidales enfocadas a lo largo de la línea
+            const yOffset = Math.sin(lx * 0.15 - this.time * 3) * 5;
+            if (lx === microTX + 15) ctx.moveTo(lx, microY - 5 + yOffset);
+            else ctx.lineTo(lx, microY - 5 + yOffset);
+        }
+        ctx.stroke();
+
+        // Textos descriptivos Microondas
+        ctx.fillStyle = '#f97316';
+        ctx.font = 'bold 12px Poppins';
+        ctx.textAlign = 'left';
+        ctx.fillText('MICROONDAS: Haz muy enfocado, requiere Línea de Vista (LOS) directa', 20, height * 0.38 + 25);
+
+
+        // 3. ZONA INFRARROJO - Corto alcance, bloqueado por sólidos
+        const irY = height * 0.82;
+        const irTX = width * 0.15;
+        const irRX = width * 0.85;
+        const irObstacleX = width * 0.5;
+
+        // Control remoto (Emisor IR)
+        ctx.fillStyle = '#1e293b';
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(irTX - 25, irY - 8, 40, 16);
+        ctx.strokeRect(irTX - 25, irY - 8, 40, 16);
+        
+        ctx.fillStyle = '#ef4444'; // Led infrarrojo
+        ctx.fillRect(irTX + 15, irY - 3, 4, 6);
+
+        // Receptor de TV
+        ctx.fillStyle = '#0b1120';
+        ctx.strokeStyle = '#334155';
+        ctx.fillRect(irRX - 20, irY - 15, 35, 30);
+        ctx.strokeRect(irRX - 20, irY - 15, 35, 30);
+        ctx.fillStyle = '#1e293b'; // Pantalla TV
+        ctx.fillRect(irRX - 17, irY - 12, 25, 20);
+        ctx.fillStyle = '#10b981'; // Receptor LED
+        ctx.beginPath();
+        ctx.arc(irRX - 5, irY + 11, 2, 0, Math.PI*2);
+        ctx.fill();
+
+        // Dibujar obstáculo que aparece/desaparece
+        if (this.irBlocked) {
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.3)';
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 1.5;
+            ctx.fillRect(irObstacleX - 8, irY - 25, 16, 50);
+            ctx.strokeRect(irObstacleX - 8, irY - 25, 16, 50);
+            
+            ctx.fillStyle = '#f87171';
+            ctx.font = 'bold 9px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('BLOQUEO', irObstacleX, irY + 38);
+        }
+
+        // Rayo infrarrojo óptico (haz de partículas rojas)
+        const limitX = this.irBlocked ? irObstacleX : irRX - 20;
+        
+        // Brillo del haz óptico
+        ctx.strokeStyle = this.irBlocked ? 'rgba(239, 68, 68, 0.25)' : 'rgba(16, 185, 129, 0.25)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(irTX + 20, irY);
+        ctx.lineTo(limitX, irY);
+        ctx.stroke();
+
+        ctx.strokeStyle = this.irBlocked ? '#ef4444' : '#10b981';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(irTX + 20, irY);
+        ctx.lineTo(limitX, irY);
+        ctx.stroke();
+        ctx.setLineDash([]); // Restablecer
+
+        // Si no está bloqueado, el receptor de la TV brilla de verde, si está bloqueado, de rojo
+        if (!this.irBlocked) {
+            ctx.fillStyle = '#10b981';
+            ctx.beginPath();
+            ctx.arc(irRX - 5, irY + 11, 3, 0, Math.PI*2);
+            ctx.fill();
+        } else {
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(irRX - 5, irY + 11, 3, 0, Math.PI*2);
+            ctx.fill();
+        }
+
+        // Textos descriptivos Infrarrojo
+        ctx.fillStyle = this.irBlocked ? '#ef4444' : '#10b981';
+        ctx.font = 'bold 12px Poppins';
+        ctx.textAlign = 'left';
+        ctx.fillText(`INFRARROJOS: Óptico, de corto alcance y ${this.irBlocked ? 'bloqueado por paredes' : 'conectado'}`, 20, height * 0.68 + 25);
+    }
+}
+
+/**
+ * Animador de Fenómenos Físicos de Propagación (Reflexión, Absorción, Multipath Fading)
+ */
+class PhysicalPhenomenaAnimator extends CanvasAnimator {
+    setup() {
+        this.particles = [];
+        this.fadingWaves = [];
+        this.fadingTimer = 0;
+    }
+
+    update(width, height) {
+        // 1. Partículas para Reflexión/Refracción
+        if (Math.random() < 0.15) {
+            this.particles.push({
+                x: width * 0.1,
+                y: height * 0.08,
+                vx: 3,
+                vy: 1.5,
+                type: 'refl-in',
+                life: 1.0
+            });
+        }
+
+        // 2. Partículas para Absorción
+        if (Math.random() < 0.2) {
+            this.particles.push({
+                x: width * 0.1,
+                y: height * 0.52,
+                vx: 4.2,
+                vy: 0,
+                type: 'absorb-in',
+                life: 1.0
+            });
+        }
+
+        // 3. Fading Multipath Waves
+        this.fadingTimer++;
+        if (this.fadingTimer > 35) {
+            this.fadingTimer = 0;
+            this.fadingWaves.push({
+                x: width * 0.15,
+                y: height * 0.82,
+                radius: 5,
+                opacity: 1.0
+            });
+        }
+
+        // Actualizar partículas
+        this.particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            
+            const boundaryX = width * 0.45;
+            const wallX = width * 0.45;
+            const wallWidth = 40;
+
+            if (p.type === 'refl-in') {
+                if (p.x >= boundaryX) {
+                    p.x = boundaryX;
+                    // Crear partícula reflejada
+                    this.particles.push({
+                        x: boundaryX,
+                        y: p.y,
+                        vx: -3,
+                        vy: 1.5,
+                        type: 'refl-out',
+                        life: 1.0
+                    });
+                    // Crear partícula refractada (desviada)
+                    this.particles.push({
+                        x: boundaryX,
+                        y: p.y,
+                        vx: 2.0,
+                        vy: 2.6,
+                        type: 'refr-out',
+                        life: 1.0
+                    });
+                    p.remove = true;
+                }
+            } else if (p.type === 'absorb-in') {
+                if (p.x >= wallX && p.x <= wallX + wallWidth) {
+                    // Ralentizar y absorber
+                    p.vx = 1.0;
+                    p.life -= 0.025; // Se apaga más rápido
+                } else if (p.x > wallX + wallWidth) {
+                    p.vx = 4.2;
+                    p.type = 'absorb-out';
+                }
+            }
+
+            if (p.x < 0 || p.x > width || p.y > height) {
+                p.remove = true;
+            }
+        });
+        
+        this.particles = this.particles.filter(p => !p.remove && p.life > 0.05);
+
+        // Actualizar ondas de multipath fading
+        this.fadingWaves.forEach(w => {
+            w.radius += 1.8;
+            w.opacity -= 0.006;
+        });
+        this.fadingWaves = this.fadingWaves.filter(w => w.opacity > 0);
+    }
+
+    draw(width, height) {
+        const ctx = this.ctx;
+        
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, width, height);
+
+        // Subdividir zonas
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, height * 0.38);
+        ctx.lineTo(width, height * 0.38);
+        ctx.moveTo(0, height * 0.68);
+        ctx.lineTo(width, height * 0.68);
+        ctx.stroke();
+
+        // 1. ZONA REFLEXIÓN Y REFRACCIÓN
+        const reflY = height * 0.22;
+        const boundaryX = width * 0.45;
+
+        // Dibujar límite del medio
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.04)';
+        ctx.fillRect(boundaryX, 0, width - boundaryX, height * 0.38);
+        
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(boundaryX, 0);
+        ctx.lineTo(boundaryX, height * 0.38);
+        ctx.stroke();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '9px Inter';
+        ctx.textAlign = 'left';
+        ctx.fillText('CAMBIO DE MEDIO', boundaryX + 10, 20);
+
+        this.particles.forEach(p => {
+            if (p.type === 'refl-in') {
+                ctx.fillStyle = '#38bdf8'; // Cyan
+            } else if (p.type === 'refl-out') {
+                ctx.fillStyle = '#eab308'; // Amarillo
+            } else if (p.type === 'refr-out') {
+                ctx.fillStyle = '#a855f7'; // Púrpura
+            }
+            
+            if (p.type.startsWith('refl') || p.type.startsWith('refr')) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 4, 0, Math.PI*2);
+                ctx.fill();
+            }
+        });
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 12px Poppins';
+        ctx.fillText('REFLEXIÓN (Rebote) & REFRACCIÓN (Desviación)', 20, 25);
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '10px Inter';
+        ctx.fillText('Aire (Velocidad Normal)', boundaryX - 120, reflY - 15);
+        ctx.fillText('Obstáculo (Desvía / Rebota)', boundaryX + 15, reflY - 15);
+
+
+        // 2. ZONA ABSORCIÓN
+        const absorbY = height * 0.52;
+        const wallX = width * 0.45;
+        const wallWidth = 40;
+
+        // Dibujar bloque absorbente
+        ctx.fillStyle = '#334155';
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1;
+        ctx.fillRect(wallX, absorbY - 30, wallWidth, 60);
+        ctx.strokeRect(wallX, absorbY - 30, wallWidth, 60);
+        
+        ctx.fillStyle = '#1e293b';
+        for (let i = 0; i < 20; i++) {
+            ctx.fillRect(wallX + 4 + (i * 7) % 32, absorbY - 22 + (i * 9) % 44, 2, 2);
+        }
+
+        this.particles.forEach(p => {
+            if (p.type === 'absorb-in' || p.type === 'absorb-out') {
+                ctx.fillStyle = `rgba(16, 185, 129, ${p.life})`; // Verde atenuante
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.type === 'absorb-in' ? 5 : 2.2, 0, Math.PI*2);
+                ctx.fill();
+            }
+        });
+
+        ctx.fillStyle = '#10b981';
+        ctx.font = 'bold 12px Poppins';
+        ctx.fillText('ABSORCIÓN: Atenuación o pérdida de potencia en obstáculos sólidos', 20, height * 0.38 + 25);
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '10px Inter';
+        ctx.fillText('Onda Incidente (Fuerte)', wallX - 140, absorbY + 5);
+        ctx.fillText('Pared', wallX + 8, absorbY - 38);
+        ctx.fillText('Onda Atenuada (Débil)', wallX + wallWidth + 20, absorbY + 5);
+
+
+        // 3. ZONA MULTIPATH FADING
+        const fadingY = height * 0.82;
+        const fadeTX = width * 0.15;
+        const fadeRX = width * 0.85;
+        const bldg1X = width * 0.42;
+        const bldg2X = width * 0.55;
+
+        // Dibujar Edificios
+        ctx.fillStyle = '#1e293b';
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(bldg1X, fadingY - 50, 60, 26);
+        ctx.strokeRect(bldg1X, fadingY - 50, 60, 26);
+        ctx.fillStyle = '#475569';
+        ctx.font = '9px Inter';
+        ctx.textAlign = 'center';
+        ctx.fillText('Edificio 1', bldg1X + 30, fadingY - 34);
+
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(bldg2X, fadingY + 24, 60, 26);
+        ctx.strokeRect(bldg2X, fadingY + 24, 60, 26);
+        ctx.fillText('Edificio 2', bldg2X + 30, fadingY + 40);
+
+        // Antena TX
+        ctx.strokeStyle = '#64748b';
+        ctx.beginPath();
+        ctx.moveTo(fadeTX, fadingY + 25);
+        ctx.lineTo(fadeTX, fadingY - 10);
+        ctx.stroke();
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(fadeTX, fadingY - 10, 4, 0, Math.PI*2);
+        ctx.fill();
+
+        // Antena RX
+        ctx.strokeStyle = '#64748b';
+        ctx.beginPath();
+        ctx.moveTo(fadeRX, fadingY + 25);
+        ctx.lineTo(fadeRX, fadingY - 10);
+        ctx.stroke();
+        ctx.fillStyle = '#818cf8';
+        ctx.beginPath();
+        ctx.arc(fadeRX, fadingY - 10, 4, 0, Math.PI*2);
+        ctx.fill();
+
+        // Caminos
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)'; // Directo
+        ctx.beginPath();
+        ctx.moveTo(fadeTX, fadingY - 10);
+        ctx.lineTo(fadeRX, fadingY - 10);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(234, 179, 8, 0.45)'; // Rebote 1
+        ctx.beginPath();
+        ctx.moveTo(fadeTX, fadingY - 10);
+        ctx.lineTo(bldg1X + 30, fadingY - 37);
+        ctx.lineTo(fadeRX, fadingY - 10);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(168, 85, 247, 0.45)'; // Rebote 2
+        ctx.beginPath();
+        ctx.moveTo(fadeTX, fadingY - 10);
+        ctx.lineTo(bldg2X + 30, fadingY + 24);
+        ctx.lineTo(fadeRX, fadingY - 10);
+        ctx.stroke();
+
+        this.fadingWaves.forEach(w => {
+            ctx.strokeStyle = `rgba(129, 140, 248, ${w.opacity})`;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(w.x, w.y, w.radius, -Math.PI/6, Math.PI/6);
+            ctx.stroke();
+
+            if (w.radius > 30) {
+                ctx.strokeStyle = `rgba(234, 179, 8, ${w.opacity * 0.8})`;
+                ctx.beginPath();
+                ctx.arc(w.x + 30, w.y, w.radius - 25, -Math.PI/6, Math.PI/6);
+                ctx.stroke();
+            }
+
+            if (w.radius > 50) {
+                ctx.strokeStyle = `rgba(168, 85, 247, ${w.opacity * 0.6})`;
+                ctx.beginPath();
+                ctx.arc(w.x + 50, w.y, w.radius - 45, -Math.PI/6, Math.PI/6);
+                ctx.stroke();
+            }
+        });
+
+        // Osciloscopio receptor
+        ctx.save();
+        ctx.translate(fadeRX + 15, fadingY - 10);
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (let j = 0; j < 30; j++) {
+            const oy = Math.sin(j * 0.55 - this.time * 4) * 4 + (Math.sin(j * 1.6 + this.time * 2) * 3);
+            if (j === 0) ctx.moveTo(j, oy);
+            else ctx.lineTo(j, oy);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = '#818cf8';
+        ctx.font = 'bold 12px Poppins';
+        ctx.fillText('MULTIPATH FADING: Señales desfasadas causan ecos y cancelaciones (fading)', 20, height * 0.68 + 25);
+    }
+}
+

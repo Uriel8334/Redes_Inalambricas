@@ -431,6 +431,39 @@ p, li, th, td, cite {
     align-items: center;
 }
 
+.two-column.visual-heavy {
+    grid-template-columns: 0.8fr 1.2fr;
+}
+
+.impact-text {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+.bullet-list-simple {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.bullet-list-simple li {
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+    margin-bottom: 15px !important;
+    position: relative;
+    padding-left: 28px;
+    color: var(--text-normal);
+}
+
+.bullet-list-simple li i {
+    position: absolute;
+    left: 0;
+    top: 3px;
+    font-size: 16px;
+}
+
 .two-column.tiled {
     align-items: stretch;
     grid-template-columns: 1fr 1fr;
@@ -859,6 +892,8 @@ p, li, th, td, cite {
 .client-1 { top: calc(20% - 23px); left: calc(20% - 23px); animation: float 3s ease-in-out infinite; }
 .client-2 { top: calc(25% - 23px); left: calc(80% - 23px); animation: float 4s ease-in-out infinite 1s; }
 .client-3 { top: calc(80% - 23px); left: calc(45% - 23px); animation: float 3.5s ease-in-out infinite 0.5s; }
+.client-4 { top: calc(75% - 23px); left: calc(15% - 23px); animation: float 3.2s ease-in-out infinite 0.7s; }
+.client-5 { top: calc(70% - 23px); left: calc(82% - 23px); animation: float 3.8s ease-in-out infinite 1.2s; }
 
 @keyframes float {
     0%, 100% { transform: translateY(0); }
@@ -881,6 +916,8 @@ p, li, th, td, cite {
 .packet-1 { animation: send-data-1 1.6s linear infinite; }
 .packet-2 { animation: send-data-2 2.0s linear infinite 0.5s; }
 .packet-3 { animation: send-data-3 1.8s linear infinite 1.0s; }
+.packet-4 { animation: send-data-4 1.7s linear infinite 0.2s; }
+.packet-5 { animation: send-data-5 1.9s linear infinite 0.8s; }
 
 @keyframes send-data-1 {
     0% { top: 20%; left: 20%; opacity: 0; transform: scale(0.5); }
@@ -901,4 +938,18 @@ p, li, th, td, cite {
     20% { opacity: 1; transform: scale(1); }
     80% { opacity: 1; transform: scale(1); }
     100% { top: 50%; left: 50%; opacity: 0; transform: scale(0.5); }
+}
+
+@keyframes send-data-4 {
+    0% { top: 75%; left: 15%; opacity: 0; transform: scale(0.5); }
+    20% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; transform: scale(1); }
+    100% { top: 50%; left: 50%; opacity: 0; transform: scale(0.5); }
+}
+
+@keyframes send-data-5 {
+    0% { top: 50%; left: 50%; opacity: 0; transform: scale(0.5); }
+    20% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; transform: scale(1); }
+    100% { top: 70%; left: 82%; opacity: 0; transform: scale(0.5); }
 }

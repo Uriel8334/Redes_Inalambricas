@@ -39,13 +39,14 @@
         <section class="slide-container" id="slide2">
             <h2 class="slide-title">¿Qué son las Redes Inalámbricas?</h2>
             <div class="content-area">
-                <div class="two-column">
-                    <div>
-                        <p>Una red inalámbrica es una infraestructura de telecomunicaciones que permite la <strong>transferencia de datos entre dispositivos sin utilizar medios físicos guiados</strong> (como cables de cobre o fibra óptica).</p>
-                        <p>Utiliza el espectro electromagnético para propagar señales a través del espacio libre, conectando estaciones transmisoras y receptoras a distancia.</p>
-                        <p>Su principal ventaja radica en la <strong>movilidad y flexibilidad</strong>, eliminando barreras geográficas y reduciendo costos de despliegue físico.</p>
+                <div class="two-column visual-heavy">
+                    <div class="text-column">
+                        <span class="tag-pill">DEFINICIÓN</span>
+                        <p class="impact-text">Es una infraestructura de telecomunicaciones que permite la <strong>transferencia de datos e información sin medios físicos guiados</strong> (cables).</p>
+                        <p>Utiliza el espectro electromagnético para propagar ondas en el espacio libre, conectando emisores y receptores a distancia.</p>
+                        <p>Su mayor valor radica en la <strong>movilidad y flexibilidad</strong>, eliminando barreras geográficas y costos de cableado físico.</p>
                     </div>
-                    <div>
+                    <div class="visual-column">
                         <div class="animation-wrapper" style="box-shadow: 0 15px 35px rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.25);">
                             <div class="network-anim-container">
                                 <!-- Ondas de Radiofrecuencia (expansión) -->
@@ -62,11 +63,15 @@
                                 <div class="client-node client-1" title="Laptop"><i class="fa-solid fa-laptop"></i></div>
                                 <div class="client-node client-2" title="Smartphone"><i class="fa-solid fa-mobile-screen"></i></div>
                                 <div class="client-node client-3" title="Tablet"><i class="fa-solid fa-tablet-screen-button"></i></div>
+                                <div class="client-node client-4" title="Smartwatch"><i class="fa-solid fa-stopwatch"></i></div>
+                                <div class="client-node client-5" title="Smart Bulb"><i class="fa-solid fa-lightbulb"></i></div>
                                 
                                 <!-- Paquetes de datos simulando transferencia -->
                                 <div class="data-particle packet-1"></div>
                                 <div class="data-particle packet-2"></div>
                                 <div class="data-particle packet-3"></div>
+                                <div class="data-particle packet-4"></div>
+                                <div class="data-particle packet-5"></div>
                             </div>
                         </div>
                     </div>
@@ -78,21 +83,21 @@
         <section class="slide-container" id="slide3">
             <h2 class="slide-title">Medios de Propagación</h2>
             <div class="content-area">
-                <div class="tiled-content">
-                    <div class="tile">
-                        <div class="icon"><i class="fa-solid fa-broadcast-tower"></i></div>
-                        <h3>Radiofrecuencia (RF)</h3>
-                        <p>El estándar principal. Utiliza bandas desde kHz hasta GHz. Posee gran capacidad para penetrar obstáculos físicos (paredes, vegetación), permitiendo coberturas amplias.</p>
+                <div class="two-column visual-heavy">
+                    <div class="text-column">
+                        <span class="tag-pill">CANALES FÍSICOS</span>
+                        <p class="impact-text">La conectividad aérea se propaga mediante ondas electromagnéticas u ópticas:</p>
+                        <ul class="bullet-list-simple">
+                            <li><i class="fa-solid fa-broadcast-tower" style="color: #38bdf8;"></i> <strong>Radiofrecuencia (RF):</strong> Banda estándar omnidireccional. Penetra paredes y cubre largas distancias.</li>
+                            <li><i class="fa-solid fa-satellite-dish" style="color: #f97316;"></i> <strong>Microondas:</strong> Enlaces de alta frecuencia muy enfocados. Requieren línea de vista directa (LOS).</li>
+                            <li><i class="fa-solid fa-lightbulb" style="color: #10b981;"></i> <strong>Infrarrojos:</strong> Haz de espectro óptico cerrado y corto alcance. Cualquier sólido bloquea la señal.</li>
+                        </ul>
                     </div>
-                    <div class="tile">
-                        <div class="icon"><i class="fa-solid fa-satellite-dish"></i></div>
-                        <h3>Microondas</h3>
-                        <p>Operan a frecuencias más elevadas (banda de GHz). Permiten mayores velocidades de transmisión, pero requieren línea de visión directa (LOS). Usadas en enlaces satelitales y torres troncales.</p>
-                    </div>
-                    <div class="tile">
-                        <div class="icon"><i class="fa-solid fa-lightbulb"></i></div>
-                        <h3>Infrarrojos</h3>
-                        <p>Transmisión óptica a muy corta distancia. Altamente segura porque no puede atravesar sólidos (paredes). Su uso comercial se limita a periféricos y sensores de corto alcance.</p>
+                    <div class="visual-column">
+                        <div class="animation-wrapper">
+                            <!-- Visualizador interactivo de propagación por medios -->
+                            <canvas id="propagation-media-canvas" class="interactive-canvas"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,17 +107,18 @@
         <section class="slide-container" id="slide4">
             <h2 class="slide-title">El Fundamento: Modulación de RF</h2>
             <div class="content-area">
-                <div class="two-column">
-                    <div>
-                        <p>La información digital (0s y 1s) no puede viajar sola por el aire en banda base. Necesita acoplarse a una señal analógica de alta frecuencia.</p>
-                        <p>La <strong>modulación</strong> consiste en modificar una característica física de la onda portadora para "codificar" los datos. Las técnicas fundamentales incluyen:</p>
-                        <ul class="bullet-list" style="margin-top: 15px;">
-                            <li><i class="fa-solid fa-wave-square"></i> <strong>Amplitud (AM / ASK):</strong> Varía la potencia de la onda portadora para denotar bits.</li>
-                            <li><i class="fa-solid fa-water"></i> <strong>Frecuencia (FM / FSK):</strong> Varía la tasa de oscilación de la señal portadora.</li>
-                            <li><i class="fa-solid fa-chart-line"></i> <strong>Fase (PM / PSK):</strong> Desplaza el ángulo de fase de la onda en transiciones de bit.</li>
+                <div class="two-column visual-heavy">
+                    <div class="text-column">
+                        <span class="tag-pill">CODIFICACIÓN DIGITAL</span>
+                        <p class="impact-text">Para transportar 0s y 1s por el aire, se modifican las propiedades físicas de una onda portadora analógica:</p>
+                        <ul class="bullet-list-simple">
+                            <li><i class="fa-solid fa-square" style="color: #818cf8; font-size: 8px; vertical-align: middle;"></i> <strong>Amplitud (AM / ASK):</strong> Modifica la potencia o voltaje de la señal portadora.</li>
+                            <li><i class="fa-solid fa-square" style="color: #38bdf8; font-size: 8px; vertical-align: middle;"></i> <strong>Frecuencia (FM / FSK):</strong> Varía la tasa de oscilación (ondas rápidas/lentas).</li>
+                            <li><i class="fa-solid fa-square" style="color: #a855f7; font-size: 8px; vertical-align: middle;"></i> <strong>Fase (PM / PSK):</strong> Invierte o desfasa el ángulo de onda al cambiar de bit.</li>
                         </ul>
+                        <p style="margin-top: 20px; font-size: 14px; color: var(--text-muted); font-style: italic;">* Selecciona una modulación en el gráfico para comparar.</p>
                     </div>
-                    <div>
+                    <div class="visual-column">
                         <div class="animation-wrapper">
                             <!-- Visualizador interactivo de modulación -->
                             <canvas id="rf-modulation-canvas" class="interactive-canvas"></canvas>
@@ -126,22 +132,21 @@
         <section class="slide-container" id="slide5">
             <h2 class="slide-title">Fenómenos Físicos de Propagación</h2>
             <div class="content-area">
-                <p style="text-align: center; margin-bottom: 25px; font-size: 19px; max-width: 900px;">A diferencia de un cable protegido, las ondas viajan por el espacio libre y sufren alteraciones que atenúan su potencia y distorsionan la señal:</p>
-                <div class="tiled-content">
-                    <div class="tile">
-                        <span class="tag-pill">Efecto Rebote</span>
-                        <h3>Reflexión y Refracción</h3>
-                        <p>Las ondas "rebotan" al chocar con superficies planas mayores a su longitud de onda (reflexión) o se desvían al cambiar de medio de propagación (refracción).</p>
+                <div class="two-column visual-heavy">
+                    <div class="text-column">
+                        <span class="tag-pill">RETOS DE PROPAGACIÓN</span>
+                        <p class="impact-text">Al propagarse por el aire, las ondas sufren efectos ambientales destructivos:</p>
+                        <ul class="bullet-list-simple">
+                            <li><i class="fa-solid fa-arrows-spin" style="color: #38bdf8;"></i> <strong>Reflexión y Refracción:</strong> Rebote e inclinación al chocar o cambiar de medio.</li>
+                            <li><i class="fa-solid fa-shield-slash" style="color: #10b981;"></i> <strong>Absorción:</strong> Pérdida drástica de energía original al traspasar obstáculos sólidos.</li>
+                            <li><i class="fa-solid fa-circle-exclamation" style="color: #818cf8;"></i> <strong>Multipath Fading:</strong> Interferencias causadas por copias de la señal desfasadas por ecos.</li>
+                        </ul>
                     </div>
-                    <div class="tile">
-                        <span class="tag-pill">Pérdida de energía</span>
-                        <h3>Absorción</h3>
-                        <p>Materiales comunes como el hormigón, el agua, el metal y la vegetación "absorben" la energía electromagnética, debilitando significativamente el rango de cobertura.</p>
-                    </div>
-                    <div class="tile">
-                        <span class="tag-pill">Interferencia Multitrayecto</span>
-                        <h3>Multipath Fading</h3>
-                        <p>Una misma señal llega al receptor por múltiples caminos y retardos debido a rebotes. Los receptores modernos usan algoritmos y ecualizadores para resolver este eco.</p>
+                    <div class="visual-column">
+                        <div class="animation-wrapper">
+                            <!-- Visualizador interactivo de fenómenos de propagación -->
+                            <canvas id="physical-phenomena-canvas" class="interactive-canvas"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
